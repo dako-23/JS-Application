@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phonebook</title>
+</head>
+
+<body>
+    <button id="load">Load Phonebook</button>
+    <button id="add-phone">Add phone</button>
+    <script>
+        const phonebookUrl = 'http://localhost:3030/jsonstore/phonebook';
+
+        const loadButton = document.getElementById('load');
+        const addButton = document.getElementById('add-phone');
+
+        loadButton.addEventListener('click', () => {
+
+            fetch(phonebookUrl)
+                .then(res => res.json())
+                .then(data => console.log(data));
+        });
+
+        const person = 'Mariyka';
+        const phone = '12312312312';
+
+        addButton.addEventListener('click', () => {
+            fetch(phonebookUrl, {
+                method: 'POST',
+                body: JSON.stringify({
+                    person,
+                    phone,
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(res => res.json())
+                .then(data => console.log(data));
+        });
+    </script>
+</body>
+
+</html>
