@@ -4,42 +4,46 @@ function solution() {
 
     const urlTitle = `http://localhost:3030/jsonstore/advanced/articles/list`
 
-    fetch(urlTitle)
-        .then(resp => resp.json())
-        .then(res => {
+    function createPreview() {
 
-            res.forEach(el => {
-                const divAcc = document.createElement('div');
-                divAcc.className = 'accordion';
+        fetch(urlTitle)
+            .then(resp => resp.json())
+            .then(res => {
 
-                const divHead = document.createElement('div');
-                divHead.className = 'head';
+                res.forEach(el => {
+                    const divAcc = document.createElement('div');
+                    divAcc.className = 'accordion';
 
-                const span = document.createElement('span');
-                span.textContent = el.title;
+                    const divHead = document.createElement('div');
+                    divHead.className = 'head';
 
-                const moreBtn = document.createElement('button');
-                moreBtn.className = 'button'
-                moreBtn.id = el._id;
-                moreBtn.textContent = 'More'
+                    const span = document.createElement('span');
+                    span.textContent = el.title;
 
-                const divExtra = document.createElement('div');
-                divExtra.className = 'extra'
+                    const moreBtn = document.createElement('button');
+                    moreBtn.className = 'button'
+                    moreBtn.id = el._id;
+                    moreBtn.textContent = 'More'
 
-                const p = document.createElement('p');
+                    const divExtra = document.createElement('div');
+                    divExtra.className = 'extra'
 
-                divHead.appendChild(span);
-                divHead.appendChild(moreBtn);
-                divAcc.appendChild(divHead);
-                mainEl.appendChild(divAcc);
-                divExtra.appendChild(p);
-                divAcc.appendChild(divExtra);
+                    const p = document.createElement('p');
 
-                moreBtn.addEventListener('click', toggle)
+                    divHead.appendChild(span);
+                    divHead.appendChild(moreBtn);
+                    divAcc.appendChild(divHead);
+                    mainEl.appendChild(divAcc);
+                    divExtra.appendChild(p);
+                    divAcc.appendChild(divExtra);
+
+                    moreBtn.addEventListener('click', toggle)
+                })
+
             })
+            .catch(err => console.log(err));
 
-        })
-        .catch(err => console.log(err));
+    }
 
     function toggle(e) {
 
@@ -64,5 +68,7 @@ function solution() {
         e.target.textContent = hidden ? 'Less' : 'More'
 
     }
+    createPreview()
 }
 window.addEventListener('load', solution);
+
