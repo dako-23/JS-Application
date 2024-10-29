@@ -23,41 +23,46 @@ function solution() {
                 moreBtn.id = el._id;
                 moreBtn.textContent = 'More'
 
+                const divExtra = document.createElement('div');
+                divExtra.className = 'extra'
+
+                const p = document.createElement('p');
+
                 divHead.appendChild(span);
                 divHead.appendChild(moreBtn);
                 divAcc.appendChild(divHead);
                 mainEl.appendChild(divAcc);
+                divExtra.appendChild(p);
+                divAcc.appendChild(divExtra);
 
-                const urlInfo = `http://localhost:3030/jsonstore/advanced/articles/details/${el._id}`
-                fetch(urlInfo)
-                    .then(resp => resp.json())
-                    .then(res => {
-
-                        const divExtra = document.createElement('div');
-                        divExtra.className = 'extra'
-
-                        const p = document.createElement('p');
-                        p.textContent = res.content
-
-                        divExtra.appendChild(p);
-                        divAcc.appendChild(divExtra);
-
-                    })
-
-                moreBtn.addEventListener('click', (e) => {
-
-                    const toggle = e.target.parentNode.parentNode;
-                    const extra = toggle.querySelector('.extra')
-
-                    const hidden = e.target.textContent === 'More';
-
-                    extra.style.display = hidden ? 'block' : 'none';
-                    e.target.textContent = hidden ? 'Less' : 'More'
-
-                })
+                moreBtn.addEventListener('click', toggle)
             })
 
         })
         .catch(err => console.log(err));
+
+    function toggle(e) {
+
+        const accordion = e.target.parentNode.parentNode;
+        const p = accordion.querySelector('.extra p');
+        const extra = accordion.querySelector('.extra')
+
+        const id = e.target.id;
+
+        const urlInfo = `http://localhost:3030/jsonstore/advanced/articles/details/${id}`
+
+        fetch(urlInfo)
+            .then(resp => resp.json())
+            .then(res => {
+                p.textContent = res.content
+            })
+            .catch(err => console.log(err));
+
+        const hidden = e.target.textContent === 'More';
+
+        extra.style.display = hidden ? 'block' : 'none';
+        e.target.textContent = hidden ? 'Less' : 'More'
+
+    }
 }
 window.addEventListener('load', solution);
