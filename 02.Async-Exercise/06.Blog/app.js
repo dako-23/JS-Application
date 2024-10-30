@@ -43,7 +43,7 @@ function attachEvents() {
         postTitleEl.textContent = data[selectedInfoEl].title
         postBodyEl.textContent = data[selectedInfoEl].body
 
-        postCommentsEl.innerHTML = ''
+
 
         fetch(urlComments)
 
@@ -53,11 +53,13 @@ function attachEvents() {
         // postTitleEl.textContent = data
 
         function createComment(res) {
+            postCommentsEl.innerHTML = ''
+
 
             for (const [id, postInfo] of Object.entries(res)) {
 
                 const li = document.createElement('li');
-                li.id = postInfo.id
+                li.id = id
                 li.textContent = postInfo.text
 
                 postCommentsEl.appendChild(li)
