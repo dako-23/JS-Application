@@ -30,6 +30,7 @@ function attachEvents() {
                 const option = document.createElement('option');
                 option.value = id;
                 option.textContent = postInfo.title;
+                option.dataset.body = postInfo.body
 
                 postsEl.appendChild(option)
 
