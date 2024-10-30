@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Data</title>
+</head>
+
+<body>
+    <button id="load-messages">Get Messages</button>
+    <div>
+        <textarea id="chat" cols="50" rows="5"></textarea>
+    </div>
+    <div>
+        <label for="message">Message</label>
+        <input type="text" id="message" />
+    </div>
+    <div>
+        <label for="author">Author</label>
+        <input type="text" id="author" />
+    </div>
+    <button id="send-message">Send</button>
+
+    <script>
+        const baseUrl = 'http://localhost:3030/jsonstore/messenger';
+
+        const loadButton = document.getElementById('load-messages');
+        loadButton.addEventListener('click', getMessages);
+
+        const sendButton = document.getElementById('send-message');
+        sendButton.addEventListener('click', sendMessage)
+
+        function getMessages() {
+            const chatArea = document.getElementById('chat');
+            
+            fetch(baseUrl)
+                .then(res => res.json())
+                .then(data => {
+                    const messages = Object
+                        .values(data)
+                        .map(message => `${message.author}: ${message.content}`)
+                        .join('\n');
+
+                    chatArea.textContent = messages;
+                })
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('message');
+            const authorInput = document.getElementById('author');
+
+            const message = messageInput.value;
+            const author = authorInput.value;
+
+            fetch(baseUrl, {
+                method: 'POST',
+                body: JSON.stringify({ author, content: message }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(err => alert(err.message));
+        }
+    </script>
+</body>
+
+</html>

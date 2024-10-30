@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Data</title>
+</head>
+
+<body>
+    <button id="load-messages">Get Messages</button>
+    <div>
+        <textarea id="chat" cols="50" rows="5"></textarea>
+    </div>
+    <form method="post" id="send-message-form">
+        <div>
+            <label for="message">Message</label>
+            <input type="text" id="message" name="message" />
+        </div>
+        <div>
+            <label for="author">Author</label>
+            <input type="text" id="author" name="author" />
+        </div>
+        <button id="send-message">Send</button>
+    </form>
+    
+    <script>
+        const baseUrl = 'http://localhost:3030/jsonstore/messenger';
+
+        const loadButton = document.getElementById('load-messages');
+        loadButton.addEventListener('click', getMessages);
+
+        const sendForm = document.getElementById('send-message-form');
+        sendForm.addEventListener('submit', sendMessage)
+
+        function getMessages() {
+            const chatArea = document.getElementById('chat');
+
+            fetch(baseUrl)
+                .then(res => res.json())
+                .then(data => {
+                    const messages = Object
+                        .values(data)
+                        .map(message => `${message.author}: ${message.content}`)
+                        .join('\n');
+
+                    chatArea.textContent = messages;
+                })
+        }
+
+        function sendMessage(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.currentTarget);
+            // const data = Object.fromEntries(formData);
+            
+            fetch(baseUrl, {
+                method: 'POST',
+                body: JSON.stringify({
+                    author: formData.get('author'),
+                    content: formData.get('message'), 
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(err => alert(err.message));
+        }
+    </script>
+</body>
+
+</html>

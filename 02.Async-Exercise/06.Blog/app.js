@@ -66,29 +66,8 @@ function attachEvents() {
                 postCommentsEl.appendChild(li)
 
             }
-
-
-
         }
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 attachEvents();
