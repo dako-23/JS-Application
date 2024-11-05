@@ -2,14 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     document.querySelector('#loadBooks').addEventListener('click', loadBook)
+
     const tbodyEl = document.querySelector('tbody');
     const titleEl = document.querySelector('h3')
     const formEl = document.querySelector('form');
-    // console.log(titleEl);
 
+    formEl.addEventListener('submit', createBook);
+
+    let id;
 
     const url = 'http://localhost:3030/jsonstore/collections/books'
-
 
     async function loadBook() {
 
@@ -22,13 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const row = document.createElement('tr');
 
-            const titleData = document.createElement('td');
+            const titleData = row.insertCell(0);
             titleData.textContent = info.title;
 
-            const authorData = document.createElement('td');
+            const authorData = row.insertCell(1);
             authorData.textContent = info.author;
 
-            const actionData = document.createElement('td');
+            const actionData = row.insertCell(2);
 
             const editBtn = document.createElement('button');
             editBtn.textContent = 'Edit';
@@ -38,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const deleteBtn = document.createElement('button');
             deleteBtn.id = id;
             deleteBtn.textContent = 'Delete';
-            // deleteBtn.addEventListener('click', deleteInfo);
+            deleteBtn.addEventListener('click', deleteInfo);
 
             actionData.appendChild(editBtn)
             actionData.appendChild(deleteBtn)
@@ -49,9 +51,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
             tbodyEl.appendChild(row)
 
-
         })
 
+    }
+
+    async function createBook(e) {
+
+        e.preventDefault()
+
+        const { title, author } = Object.fromEntries(new FormData(e.currentTarget));
+
+        console.log(title);
+
+        if (title == '' || author == '') return
+        await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                title: title,
+                author: author
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        loadBook();
     }
 
     async function editInfo(e) {
@@ -63,31 +86,41 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = row.children[0].textContent;
 
         const author = row.children[1].textContent;
-        const id = e.target.id
+        id = e.target.id
 
         formEl.querySelector('input[name="title"]').value = title;
         formEl.querySelector('input[name="author"]').value = author;
         formEl.querySelector('button').textContent = 'Save'
 
-        formEl.addEventListener('submit', async (ev) => {
-            ev.preventDefault()
+        formEl.addEventListener('submit', submitEditInfo);
+    }
 
-            const updatedTitle = formEl.querySelector('input[name="title"]').value
-            const updatedAuthor = formEl.querySelector('input[name="author"]').value
+    async function submitEditInfo(ev) {
+        ev.preventDefault()
 
-            const res = await fetch(`${url}/${id}`, {
-                method: 'Put',
-                body: JSON.stringify({
-                    title: updatedTitle,
-                    author: updatedAuthor
-                }),
-                headers: { 'Content-Type': 'aplication/json' }
-            })
-            loadBook();
-            titleEl.textContent = 'FORM';
-            formEl.querySelector('button').textContent = 'Submit'
-            formEl.reset();
+        const updatedTitle = formEl.querySelector('input[name="title"]').value
+        const updatedAuthor = formEl.querySelector('input[name="author"]').value
 
+        await fetch(`${url}/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                title: updatedTitle,
+                author: updatedAuthor
+            }),
+            headers: { 'Content-Type': 'aplication/json' }
         })
+        loadBook();
+        titleEl.textContent = 'FORM';
+        formEl.querySelector('button').textContent = 'Submit'
+        formEl.reset();
+
+    }
+
+    async function deleteInfo(e) {
+        const id = e.target.id
+        e.target.parentNode.parentNode.remove();
+
+        await fetch(`${url}/${id}`, { method: 'DELETE' });
+
     }
 })
