@@ -1,90 +1,41 @@
-const baseUrl = 'http://localhost:3030/data/recipes';
-const mainElement = document.querySelector('body > main');
+import createPage from "./views/create.js";
+import homePage from "./views/home.js";
+import loginPage from "./views/login.js";
+import logoutPage from "./views/logout.js";
+import registerPage from "./views/register.js";
+import { renderNavigation } from "./views/navigation.js";
+
+const pathnameViews = {
+    '/': homePage,
+    '/login': loginPage,
+    '/register': registerPage,
+    '/create': createPage,
+    '/logout': logoutPage,
+};
 
 function initNavigation() {
-    const email = localStorage.getItem('email');
+    const navElement = document.querySelector('header nav');
 
-    if (email && email !== 'undefined') {
-        const userNavigation = document.getElementById('user');
-        userNavigation.style.display = 'block';
-    } else {
-        const guestNavigation = document.getElementById('guest');
-        guestNavigation.style.display = 'block';
-    }
-}
+    navElement.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') {
+            return;
+        }
 
-function loadRecipes() {
-    fetch(baseUrl)
-        .then(res => res.json())
-        .then(data => {
-            mainElement.innerHTML = '';
+        e.preventDefault();
 
-            const recipes = Object.values(data);
+        const url = new URL(e.target.href);
+        const pathname = url.pathname;
 
-            mainElement.append(...recipes.map(renderArticle));
-        })
-        .catch(err => alert(err.message));
-}
+        // hide all sections
+        document
+            .querySelectorAll('.site-section')
+            .forEach(section => section.style.display = 'none');
 
-function renderArticle(article) {
-    console.log(article);
-
-    const h2Element = document.createElement('h2');
-    h2Element.textContent = article.name;
-
-    const titleDiv = document.createElement('div');
-    titleDiv.classList.add('title');
-    titleDiv.appendChild(h2Element);
-
-    const imgElement = document.createElement('img');
-    imgElement.src = article.img;
-
-    const smallDiv = document.createElement('div');
-    smallDiv.classList.add('small');
-    smallDiv.appendChild(imgElement);
-
-    const articleElement = document.createElement('article');
-    articleElement.classList.add('preview');
-    articleElement.appendChild(titleDiv);
-    articleElement.appendChild(smallDiv);
-
-    articleElement.addEventListener('click', async () => {
-        const response = await fetch(`${baseUrl}/${article._id}`);
-        const articleDetails = await response.json();
-
-        const articleDetailsElement = renderDetailedArticle(articleDetails);
-        mainElement.innerHTML = '';
-        mainElement.appendChild(articleDetailsElement);
+        pathnameViews[pathname]();
     });
-
-    return articleElement;
+    
+    pathnameViews['/']();
+    renderNavigation();
 }
 
-// DONT DO THIS AT HOME! XSS WARNINGS!!!! DONT HAVE TIME FOR WORKSHOP
-function renderDetailedArticle(article) {
-    const articleElement = document.createElement('article');
-
-    articleElement.innerHTML = `
-        <h2>${article.name}</h2>
-        <div class="band">
-            <div class="thumb">
-                <img src="${article.img}">
-            </div>
-            <div class="ingredients">
-                <h3>Ingredients:</h3>
-                <ul>
-                    ${article.ingredients.map(i => `<li>${i}</li>`).join('\n')}
-                </ul>
-            </div>
-        </div>
-        <div class="description">
-            <h3>Preparation:</h3>
-            ${article.steps.map(step => `<p>${step}</p>`).join('\n')}
-        </div>
-    `;
-
-    return articleElement;
-}
-
-loadRecipes();
 initNavigation()

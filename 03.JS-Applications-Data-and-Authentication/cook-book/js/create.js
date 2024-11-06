@@ -1,5 +1,11 @@
-const createForm = document.querySelector('main article form');
 const baseUrl = 'http://localhost:3030/data/recipes';
+
+const sectionElement = document.getElementById('create-section');
+const createForm = sectionElement.querySelector('form');
+
+export default function createPage() {
+    sectionElement.style.display = 'block';
+}
 
 createForm.addEventListener('submit', (e) => {
     e.preventDefault();
