@@ -212,3 +212,7 @@
 .comment-area {
     min-width: 100%
 }
+
+.topic-container {
+    display: blok;
+}
