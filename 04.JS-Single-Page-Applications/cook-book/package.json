@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "dependencies": {
-    "lite-server": "^2.6.1"
+  "devDependencies": {
+    "lite-server": "^2.6.1",
+    "playwright-chromium": "^1.48.2"
   }
 }
