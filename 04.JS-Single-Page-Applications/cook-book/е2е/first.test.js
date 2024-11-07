@@ -54,4 +54,3 @@ await browser.close();
 
 
 
-const url = 'https://www.facebook.com/emil.iordanov.7';
