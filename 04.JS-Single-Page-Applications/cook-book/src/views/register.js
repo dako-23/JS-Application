@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:3030/users';
+import auth from "../api/auth.js";
 
 const sectionElement = document.getElementById('register-section');
 const registerForm = sectionElement.querySelector('form');
@@ -12,21 +12,8 @@ registerForm.addEventListener('submit', (e) => {
 
     const formData = new FormData(e.currentTarget);
 
-    fetch(`${baseUrl}/register`, {
-        method: 'POST',
-        body: JSON.stringify({
-            email: formData.get('email'),
-            password: formData.get('password')
-        }),
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-        .then(res => res.json())
-        .then(data => {
-            localStorage.setItem('accessToken', data.accessToken);
-            localStorage.setItem('email', data.email);
+    auth.register(formData.get('email'), formData.get('password'))
 
-            location.href = '/';
-        });
+
+        .catch(err => alert(err.message));
 })

@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:3030/users';
+import auth from "../api/auth.js";
 
 const sectionElement = document.getElementById('login-section');
 const loginForm = sectionElement.querySelector('form');
@@ -12,28 +12,7 @@ loginForm.addEventListener('submit', (e) => {
 
     const { email, password } = Object.fromEntries(new FormData(e.currentTarget));
 
-    fetch(`${baseUrl}/login`, {
-        method: 'POST',
-        body: JSON.stringify({
-            email,
-            password,
-        }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(res => res.json())
-        .then(data => {
-            if (data.code >= 400) {
-                return alert(data.message);
-            }
-
-            localStorage.setItem('accessToken', data.accessToken);
-            localStorage.setItem('email', data.email);
-            localStorage.setItem('_id', data._id);
-
-            location.href = '/';
-        })
+    auth.login(email, password)
         .catch(err => alert(err.message));
 });
 

@@ -4,7 +4,8 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "dev": "lite-server --baseDir=src"
+    "dev": "lite-server --baseDir=src",
+    "test": "mocha --timeout 10000"
   },
   "keywords": [],
   "author": "",

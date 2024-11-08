@@ -1,4 +1,5 @@
-const baseUrl = 'http://localhost:3030/data/recipes';
+import recipes from "../api/recipes.js";
+
 const sectionElement = document.getElementById('home-section');
 
 export default function homePage() {
@@ -7,13 +8,9 @@ export default function homePage() {
 }
 
 function loadRecipes() {
-    fetch(baseUrl)
-        .then(res => res.json())
-        .then(data => {
+    recipes.getAll()
+        .then(recipes => {
             sectionElement.innerHTML = '';
-
-            const recipes = Object.values(data);
-
             sectionElement.append(...recipes.map(renderRecipe));
         })
         .catch(err => alert(err.message));
