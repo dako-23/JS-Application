@@ -13,7 +13,5 @@ registerForm.addEventListener('submit', (e) => {
     const formData = new FormData(e.currentTarget);
 
     auth.register(formData.get('email'), formData.get('password'))
-
-
         .catch(err => alert(err.message));
 })
