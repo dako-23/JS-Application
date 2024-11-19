@@ -9,7 +9,6 @@ import { renderNavigation } from "./views/navigation.js";
 
 page(renderNavigation)
 
-
 page('/', homePage);
 page('/login', loginPage);
 page('/register', registerPage);

@@ -86,7 +86,6 @@ function createFormSubmit(e) {
     validateInput(priceInput, Number(data.price) > 0);
     validateInput(imgInput, data.img.trim() !== '');
 
-    
     const isValid = makeInput.classList.contains('is-valid') &&
         modelInput.classList.contains('is-valid') &&
         yearInput.classList.contains('is-valid') &&
