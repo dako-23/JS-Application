@@ -22,10 +22,7 @@ const template = (isAuthenticated) => html`
 `;
 
 export function renderNavigation(ctx, next) {
-    const email = localStorage.getItem('email');
-    const isAuthenticated = !!email;
-
-    render(template(isAuthenticated), headerSection);
-
+    render(template(ctx.isAuthenticated, ctx.pathname), headerSection);
+    
     next();
 }

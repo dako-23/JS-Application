@@ -1,7 +1,6 @@
 import { html, render } from 'https://unpkg.com/lit-html';
 import page from "//unpkg.com/page/page.mjs";
-
-const baseUrl = 'http://localhost:3030/data/catalog';
+import furnitures from '../api/furnitures.js';
 
 const rootEl = document.querySelector('#root');
 
@@ -55,58 +54,41 @@ export default function createPage() {
     render(template(), rootEl);
 }
 
-function validateInput(input, condition) {
-    if (condition) {
-        input.classList.remove('is-invalid');
-        input.classList.add('is-valid');
-    } else {
-        input.classList.remove('is-valid');
-        input.classList.add('is-invalid');
-    }
-}
-
 function createFormSubmit(e) {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
 
-    const makeInput = e.target.querySelector('#new-make');
-    const modelInput = e.target.querySelector('#new-model');
-    const yearInput = e.target.querySelector('#new-year');
-    const descriptionInput = e.target.querySelector('#new-description');
-    const priceInput = e.target.querySelector('#new-price');
-    const imgInput = e.target.querySelector('#new-image');
+    const inputs = [
+        { input: e.target.querySelector('#new-make'), condition: () => data.make.trim().length >= 4 },
+        { input: e.target.querySelector('#new-model'), condition: () => data.model.trim().length >= 4 },
+        { input: e.target.querySelector('#new-year'), condition: () => data.year >= 1950 && data.year <= 2050 },
+        { input: e.target.querySelector('#new-description'), condition: () => data.description.trim().length > 10 },
+        { input: e.target.querySelector('#new-price'), condition: () => Number(data.price) > 0 },
+        { input: e.target.querySelector('#new-image'), condition: () => data.img.trim() !== '' },
+    ];
 
-    validateInput(makeInput, data.make.length >= 4);
-    validateInput(modelInput, data.model.length >= 4);
-    validateInput(yearInput, data.year >= 1950 && data.year <= 2050);
-    validateInput(descriptionInput, data.description.length > 10);
-    validateInput(priceInput, Number(data.price) > 0);
-    validateInput(imgInput, data.img.trim() !== '');
-
-
-    const isValid = makeInput.classList.contains('is-valid') &&
-        modelInput.classList.contains('is-valid') &&
-        yearInput.classList.contains('is-valid') &&
-        descriptionInput.classList.contains('is-valid') &&
-        priceInput.classList.contains('is-valid') &&
-        imgInput.classList.contains('is-valid');
+    const isValid = validateInputs(inputs);
 
     if (!isValid) return;
 
-    const accessToken = localStorage.getItem('accessToken');
-
-    fetch(baseUrl, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Authorization': accessToken
-        }
-    })
-        .then(res => res.json())
-        .then(data => {
-            page.redirect('/');
-        });
+    furnitures.create(data)
+        .then(() => page.redirect('/'));
 };
+
+function validateInputs(inputs) {
+    let formIsValid = true;
+
+    inputs.forEach(({ input, condition }) => {
+        const isValid = condition();
+        input.classList.toggle('is-valid', isValid);
+        input.classList.toggle('is-invalid', !isValid);
+
+        if (!isValid) {
+            formIsValid = false;
+        }
+    });
+
+    return formIsValid;
+}

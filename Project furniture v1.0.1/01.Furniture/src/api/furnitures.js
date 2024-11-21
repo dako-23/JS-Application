@@ -9,6 +9,42 @@ const furnitures = {
     getOne(id) {
         return fetch(`${baseUrl}/${id}`)
             .then(res => res.json());
+    },
+    update(id, data) {
+        const token = localStorage.getItem('accessToken');
+
+        return fetch(`${baseUrl}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Authorization': token,
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+    },
+    create(data) {
+        const token = localStorage.getItem('accessToken');
+
+        return fetch(baseUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Authorization': token,
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+    },
+    delete(id) {
+        const token = localStorage.getItem('accessToken');
+
+        return fetch(`${baseUrl}/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-Authorization': token,
+            }
+        });
     }
 }
 

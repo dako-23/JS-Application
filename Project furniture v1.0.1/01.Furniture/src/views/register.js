@@ -36,8 +36,8 @@ const template = () => html`
 `
 
 
-export default function registerPage() {
-    render(template(), rootEl);
+export default function registerPage(ctx) {
+    render(template(formSubmitHandler.bind(ctx)), rootEl);
 }
 
 function formSubmitHandler(e) {
@@ -46,7 +46,9 @@ function formSubmitHandler(e) {
     const formData = new FormData(e.currentTarget);
 
     auth.register(formData.get('email'), formData.get('password'))
-        .then(() => {
+        .then((userData) => {
+            this.setUserData(userData);
+
             page.redirect('/');
         })
         .catch(err => alert(err.message));

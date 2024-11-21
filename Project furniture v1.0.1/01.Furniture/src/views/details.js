@@ -3,9 +3,7 @@ import furnitures from "../api/furnitures.js";
 import catalogPage from './catalog.js';
 const url = 'http://localhost:3030/data/catalog'
 
-
 const rootEl = document.querySelector('#root');
-
 
 const template = ({ product, isOwner }) => html`
 <div class="row space-top">
@@ -31,27 +29,14 @@ const template = ({ product, isOwner }) => html`
         <div>
             ${isOwner
         ? html`
-                <a href="/edit/${product._id}" class="btn btn-info">Edit</a>
-                <a href="/" @click=${() => deleteProduct(product._id)} class="btn btn-red">Delete</a>
+                <a href="/catalog/${product._id}/edit" class="btn btn-info">Edit</a>
+                <a href="/catalog/${product._id}/delete" class="btn btn-red">Delete</a>
                 `
         : ''}
         </div>
     </div>
 </div>
 `;
-
-async function deleteProduct(id) {
-
-    const token = localStorage.getItem('accessToken');
-
-    await fetch(`${url}/${id}`, {
-        method: 'DELETE', headers: {
-            'X-Authorization': token,
-        },
-    });
-
-    catalogPage()
-}
 
 export default async function detailsPage(ctx) {
     const { furnitureId } = ctx.params;
@@ -61,9 +46,6 @@ export default async function detailsPage(ctx) {
     const userId = localStorage.getItem('_id');
     const isOwner = product._ownerId === userId;
 
-    render(template({
-        product,
-        isOwner,
-    }), rootEl);
+    render(template({ product, isOwner }), rootEl);
 }
 
