@@ -5,7 +5,7 @@ import auth from "../api/auth.js";
 
 const rootEl = document.querySelector('#root')
 
-const template = () => html`
+const template = (submitHandler) => html`
 <div class="container">
         <div class="row space-top">
             <div class="col-md-12">
@@ -13,7 +13,7 @@ const template = () => html`
                 <p>Please fill all fields.</p>
             </div>
         </div>
-        <form @submit=${loginSubmitHandler}>
+        <form @submit=${submitHandler}>
             <div class="row space-top">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -32,8 +32,8 @@ const template = () => html`
 `
 
 
-export default function loginPage() {
-    render(template(), rootEl);
+export default function loginPage(ctx) {
+    render(template(loginSubmitHandler.bind(ctx)), rootEl);
 }
 
 function loginSubmitHandler(e) {
@@ -42,7 +42,8 @@ function loginSubmitHandler(e) {
     const { email, password } = Object.fromEntries(new FormData(e.currentTarget));
 
     auth.login(email, password)
-        .then(() => {
+        .then((userData) => {
+            this.setUserData(userData)
             page.redirect('/');
         })
         .catch(err => alert(err.message));

@@ -6,14 +6,14 @@ import auth from "../api/auth.js";
 
 const rootEl = document.querySelector('#root')
 
-const template = () => html`
+const template = (sumbitHandler) => html`
 <div class="row space-top">
             <div class="col-md-12">
                 <h1>Register New User</h1>
                 <p>Please fill all fields.</p>
             </div>
         </div>
-        <form @submit=${formSubmitHandler}>
+        <form @submit=${sumbitHandler}>
             <div class="row space-top">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -43,9 +43,9 @@ export default function registerPage(ctx) {
 function formSubmitHandler(e) {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
+    const { email, password } = Object.fromEntries(new FormData(e.currentTarget));
 
-    auth.register(formData.get('email'), formData.get('password'))
+    auth.register(email, password)
         .then((userData) => {
             this.setUserData(userData);
 

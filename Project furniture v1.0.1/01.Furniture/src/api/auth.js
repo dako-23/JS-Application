@@ -17,10 +17,7 @@ const auth = {
                 if (data.code >= 400) {
                     throw new Error('Something went wrong');
                 }
-
-                localStorage.setItem('accessToken', data.accessToken);
-                localStorage.setItem('email', data.email);
-                localStorage.setItem('_id', data._id);
+                return data;
             })
     },
 
@@ -37,14 +34,18 @@ const auth = {
         })
             .then(res => res.json())
             .then(data => {
-                localStorage.setItem('accessToken', data.accessToken);
-                localStorage.setItem('email', data.email);
-                localStorage.setItem('_id', data._id);
-
                 return data;
             });
-    }
+    },
+    logout() {
+        const token = localStorage.getItem('accessToken');
 
+        return fetch(`${baseUrl}/logout`, {
+            headers: {
+                'X-Authorization': token,
+            }
+        });
+    }
 }
 
 export default auth;
