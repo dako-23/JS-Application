@@ -1,7 +1,6 @@
 import { html, render } from 'https://unpkg.com/lit-html';
 import furnitures from "../api/furnitures.js";
-import catalogPage from './catalog.js';
-const url = 'http://localhost:3030/data/catalog'
+
 
 const rootEl = document.querySelector('#root');
 
@@ -45,6 +44,11 @@ export default async function detailsPage(ctx) {
 
     const userId = localStorage.getItem('_id');
     const isOwner = product._ownerId === userId;
+
+    console.log(product._ownerId);
+    console.log(userId);
+
+
 
     render(template({ product, isOwner }), rootEl);
 }

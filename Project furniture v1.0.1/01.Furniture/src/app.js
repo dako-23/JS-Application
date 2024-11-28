@@ -11,6 +11,7 @@ import detailsPage from "./views/details.js";
 import { auth } from "./middlewares/authMiddlewares.js";
 import editPage from "./views/edit.js";
 import deletePage from "./views/delete.js";
+import myFurnitureView from "./views/myFurniture.js";
 
 
 page(auth)
@@ -21,10 +22,13 @@ page('/catalog', catalogPage);
 page('/catalog/:furnitureId', detailsPage);
 page('/catalog/:furnitureId/edit', editPage);
 page('/catalog/:furnitureId/delete', deletePage)
+page('/my-furniture', myFurnitureView)
+page('/my-furniture/:furnitureId', detailsPage)
 page('/login', loginPage);
 page('/register', registerPage);
 page('/create', createPage);
 page('/logout', logoutPage);
+
 
 
 

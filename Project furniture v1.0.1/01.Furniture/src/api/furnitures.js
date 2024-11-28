@@ -45,6 +45,12 @@ const furnitures = {
                 'X-Authorization': token,
             }
         });
+    },
+    myFurniture(id) {
+
+        return fetch(`${baseUrl}?where=_ownerId%3D%22${id}%22`)
+            .then(res => res.json())
+            .then(data => Object.values(data));
     }
 }
 
