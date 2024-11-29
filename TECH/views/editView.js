@@ -29,17 +29,20 @@ export async function editView(ctx) {
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
 
-        console.log(data);
+        const solution = {
+            type: data.type.trim(),
+            imageUrl: data['image-url'].trim(),
+            description: data.description.trim(),
+            learnMore: data['more-info'].trim(),
+        };
 
-        if (data.type === '' || data['image-url'] === '' || data.description === '' || data['more-info'] === '') return;
-
-        try {
-            await put(`/data/solutions/${productId}`, data);
-
-            ctx.page.redirect(`/dashboard/details/${productId}`);
-        } catch (err) {
-            console.log(err);
+        if (Object.values(solution).some((x) => !x)) {
+            return alert("All fields are required!");
         }
+
+        await put(`/data/solutions/${productId}`, data);
+        ctx.page.redirect(`/details/${productId}`);
+
     }
 
 }

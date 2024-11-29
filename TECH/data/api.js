@@ -30,6 +30,9 @@ export async function request(method, url, data) {
         throw error
     }
 
+    if (response.status == 204) {
+        return response;
+    }
 
     const result = await response.json();
     return result;
@@ -52,7 +55,7 @@ export async function getLikesCount(solutionId) {
 
 export async function hasUserLiked(solutionId, userId) {
     const result = await get(`/data/likes?where=solutionId%3D%22${solutionId}%22%20and%20_ownerId%3D%22${userId}%22&count`);
-    return result > 0; 
+    return result > 0;
 }
 
 

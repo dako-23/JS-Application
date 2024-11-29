@@ -27,13 +27,19 @@ export function createView(ctx) {
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
 
-        if (data.type === '' || data['image-url'] === '' || data.description === '' || data['more-info'] === '') return;
+        const solution = {
+            type: data.type.trim(),
+            imageUrl: data['image-url'].trim(),
+            description: data.description.trim(),
+            learnMore: data['more-info'].trim(),
+        };
 
-        try {
-            await post('/data/solutions', data);
-            ctx.page.redirect('/dashboard');
-        } catch (err) {
-            console.log(err);
+        if (Object.values(solution).some((x) => !x)) {
+            return alert("All fields are required!");
         }
+
+        await post('/data/solutions', data);
+        ctx.page.redirect('/dashboard');
+
     }
 }

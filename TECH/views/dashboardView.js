@@ -5,7 +5,9 @@ const template = (data, isLoading) => html`
 <h2>Solutions</h2>
     <section id="solutions">
         ${isLoading ? html`<p>Loading...</p>` :
-        data.length > 0 ? data.map(res => html` 
+        data.length == 0
+            ? html`<h2 id="no-solution">No Solutions Added.</h2>`
+            : data.map(res => html` 
         <div class="solution">
             <img src="${res['image-url']}" alt="example1" />
             <div class="solution-info">
@@ -13,10 +15,9 @@ const template = (data, isLoading) => html`
                 <p class="description">
                     ${res.description}
                 </p>
-                <a class="details-btn" href="dashboard/details/${res._id}">Learn More</a>
+                <a class="details-btn" href="/details/${res._id}">Learn More</a>
             </div>
-        </div>`)
-            : html`<h2 id="no-solution">No Solutions Added.</h2>`}
+        </div>`)}
 `
 
 export async function dashboardView(ctx) {
@@ -27,21 +28,14 @@ export async function dashboardView(ctx) {
         ctx.render(template(data, isLoading));
     }
 
-    const productClickHandler = (productId) => {
-        page.redirect(`/catalog/${productId}`);
-    };
-
     try {
         const data = await get('/data/solutions?sortBy=_createdOn%20desc');
         isLoading = false
-        updateView(data, isLoading, productClickHandler)
+        updateView(data, isLoading)
 
     } catch (err) {
-        
         isLoading = false
-        updateView([], isLoading)
-        w
-        
+        // updateView([], isLoading)
     }
 
 }

@@ -18,7 +18,7 @@ page(naviView);
 
 page('/', homeView)
 page('/dashboard', dashboardView)
-page('/dashboard/details/:productId', detailsView)
+page('/details/:productId', detailsView)
 page('/register', registerView);
 page('/login', loginPage)
 page('/logout', logoutPage)

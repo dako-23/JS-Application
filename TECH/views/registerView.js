@@ -26,24 +26,17 @@ export function registerView(ctx) {
 
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
-        console.log(data);
 
-
-        if (data.password !== data['re-password']) {
-            window.alert('Passwords do not match!');
-            return;
-        };
-
-        if (data.email === '' || data.password === '' || data['re-password'] === '') {
+        if (!data.email || !data.password) {
             window.alert('All fields are required!');
             return;
+        } else if (data.password !== data['re-password']) {
+            window.alert('Passwords do not match!');
+            return;
         }
 
-        try {
-            await register(data.email, data.password);
-            ctx.page.redirect('/');
-        } catch (err) {
-            window.alert(`Registration failed: ${err.message}`);
-        }
+        await register(data.email, data.password);
+        event.target.reset();
+        ctx.page.redirect('/');
     }
 }

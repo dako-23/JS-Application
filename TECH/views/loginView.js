@@ -27,17 +27,11 @@ export default function loginPage(ctx) {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
-    if (data.email == '' || data.password == '') {
+    if (!data.email || !data.password) {
       window.alert('All fields are required!');
       return;
     }
-
-    try {
       await login(data.email, data.password);
       ctx.page.redirect('/')
-    } catch (err) {
-      // err.handled = true;
-      window.alert(err.message);
-    }
   }
 }
