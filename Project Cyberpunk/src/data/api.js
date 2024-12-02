@@ -48,12 +48,3 @@ function handleError(err) {
         alert('Request error:\n' + err.message);
     }
 }
-
-export async function getLikesCount(solutionId) {
-    return await get(`/data/likes?where=solutionId%3D%22${solutionId}%22&distinct=_ownerId&count`);
-}
-
-export async function hasUserLiked(solutionId, userId) {
-    const result = await get(`/data/likes?where=solutionId%3D%22${solutionId}%22%20and%20_ownerId%3D%22${userId}%22&count`);
-    return result > 0;
-}

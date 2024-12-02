@@ -1,4 +1,5 @@
-import { html } from "../../lib/lit-html.js";
+// import { html } from "../../lib/lit-html.js";
+import { html } from "../../node_modules/lit-html/lit-html.js"
 import { post } from "../data/api.js";
 import { showError } from "./showError.js";
 

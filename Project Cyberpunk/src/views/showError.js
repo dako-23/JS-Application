@@ -1,8 +1,13 @@
 export function showError(message) {
 
     const errorBox = document.querySelector('#errorBox');
-    
-    errorBox.textContent = message;
+    const span = document.createElement('span');
+
+    errorBox.innerHTML = '';
+
+    span.textContent = message;
+
+    errorBox.appendChild(span)
     errorBox.style.display = 'block';
 
     setTimeout(() => {
