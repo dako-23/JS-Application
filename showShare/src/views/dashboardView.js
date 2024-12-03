@@ -21,7 +21,6 @@ export async function dashboardView(ctx) {
 
     try {
         const data = await get('/data/shows?sortBy=_createdOn%20desc');
-        console.log(data);
 
         ctx.render(template(data))
 

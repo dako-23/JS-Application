@@ -4,7 +4,19 @@ import { post } from "../data/api.js";
 // import { showError } from "./showError.js";
 
 const template = (onCreate) => html`
-@submit=${onCreate}
+<section id="create">
+          <div class="form">
+            <h2>Add Show</h2>
+        <form class="create-form" @submit=${onCreate} >
+               <input type="text" name="title" id="title" placeholder="TV Show title" />
+               <input type="text" name="image-url" id="imageUrl" placeholder="Image URL" />
+               <input type="text" name="genre" id="genre" placeholder="Genre" />
+               <input type="text" name="country" id="country" placeholder="Country"/>
+             <textarea id="details" name="details" placeholder="Details" rows="2" cols="10"></textarea>
+              <button type="submit">Add Show</button>
+        </form>
+          </div>
+</section>
 `
 
 export function createView(ctx) {
@@ -18,19 +30,19 @@ export function createView(ctx) {
         const data = Object.fromEntries(formData.entries());
 
         const product = {
-            item: data.item.trim(),
-            imageUrl: data.imageUrl.trim(),
-            price: data.price.trim(),
-            availability: data.availability.trim(),
-            type: data.type.trim(),
-            description: data.description.trim()
+            title: data.title.trim(),
+            imageUrl: data["image-url"].trim(),
+            genre: data.genre.trim(),
+            country: data.country.trim(),
+            details: data.details.trim()
         };
-
+        
         if (Object.values(product).some((x) => !x)) {
-            return showError("All fields are required!");
+            
+            return window.alert("All fields are required!")
         }
 
-        await post('/data/.......', data);
+        await post('/data/shows', product);
         ctx.page.redirect('/dashboard');
     }
 }
