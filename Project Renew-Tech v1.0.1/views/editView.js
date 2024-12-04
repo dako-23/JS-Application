@@ -4,13 +4,13 @@ import { put, get } from '../data/api.js'
 const template = (onEdit, products) => html`
 <section id="edit">
         <div @submit=${onEdit} class="form">
-            <img class="border" src=${products['image-url']} alt="" />
+            <img class="border" src=${products.imageUrl} alt="" />
             <h2>Edit Solution</h2>
             <form class="edit-form">
                 <input type="text" name="type" id="type" placeholder="Solution Type" value="${products.type}" />
-                <input type="text" name="image-url" id="image-url" placeholder="Image URL" value="${products['image-url']}" />
+                <input type="text" name="image-url" id="image-url" placeholder="Image URL" value="${products.imageUrl}" />
                 <textarea id="description" name="description" placeholder="Description" rows="2" cols="10">${products.description}</textarea>
-                <textarea id="more-info" name="more-info" placeholder="more Info" rows="2" cols="10">${products['more-info']}</textarea>
+                <textarea id="more-info" name="more-info" placeholder="more Info" rows="2" cols="10">${products.learnMore}</textarea>
                 <button type="submit">Edit</button>
             </form>
         </div>
@@ -40,7 +40,7 @@ export async function editView(ctx) {
             return alert("All fields are required!");
         }
 
-        await put(`/data/solutions/${productId}`, data);
+        await put(`/data/solutions/${productId}`, solution);
         ctx.page.redirect(`/details/${productId}`);
 
     }

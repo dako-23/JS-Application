@@ -38,7 +38,7 @@ export function createView(ctx) {
             return alert("All fields are required!");
         }
 
-        await post('/data/solutions', data);
+        await post('/data/solutions', solution);
         ctx.page.redirect('/dashboard');
 
     }

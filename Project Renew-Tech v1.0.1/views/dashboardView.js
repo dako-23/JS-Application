@@ -9,7 +9,7 @@ const template = (data, isLoading) => html`
             ? html`<h2 id="no-solution">No Solutions Added.</h2>`
             : data.map(res => html` 
         <div class="solution">
-            <img src="${res['image-url']}" alt="example1" />
+            <img src="${res.imageUrl}" alt="example1" />
             <div class="solution-info">
                 <h3 class="type">${res.type}</h3>
                 <p class="description">

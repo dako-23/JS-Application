@@ -7,7 +7,7 @@ import { hasUserLiked } from '../data/api.js'
 const template = ({ product, isOwner, hasUser, likes, userLiked }) => html`
 <section id="details">
         <div id="details-wrapper">
-            <img id="details-img" src=${product['image-url']} alt="example1" />
+            <img id="details-img" src=${product.imageUrl} alt="example1" />
             <div>
                 <p id="details-type">${product.type}</p>
                 <div id="info-wrapper">
@@ -16,7 +16,7 @@ const template = ({ product, isOwner, hasUser, likes, userLiked }) => html`
                         ${product.description}
                         </p>
                         <p id="more-info">
-                        ${product['more-info']}
+                        ${product.learnMore}
                         </p>
                     </div>
                 </div>
